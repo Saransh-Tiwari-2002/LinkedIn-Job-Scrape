@@ -92,9 +92,11 @@ def part1_main():
     driver.get('https://www.careerguide.com/career-options')  #navigating to careerguide's webpage
     for x in driver.find_elements_by_xpath("//div[@class='col-md-4'][@style='padding: 15px;']"):
         temp=[]
-        for y in x.find_elements_by_xpath(".//li"):
-            temp.append(y.text)
-        z.update({x.find_element_by_xpath(".//h2[@class='c-font-bold']").text: temp})    
+        #disregarding Institutes in India from the career options list as they're irrelevant to our task of job search on LinkedIn
+        if(x.find_element_by_xpath(".//h2[@class='c-font-bold']").text != 'Institutes in India'):       
+            for y in x.find_elements_by_xpath(".//li"):
+                temp.append(y.text)
+            z.update({x.find_element_by_xpath(".//h2[@class='c-font-bold']").text: temp})    
     with open(join(dirname(__file__), 'step1.json'), "w", encoding='utf-8') as outfile:
         outfile.write(dumps(z, indent = 4))     #writing the final data from step 1 of the task to a json file
         outfile.close()
@@ -108,7 +110,7 @@ def part2_main():
         
     driver=linkedin_login()         #opening a new Chrome window with an a LinkedIn account logged in
     for location_state in ('Maharashtra', 'Delhi', 'Karnataka', 'Kerala', 'Telangana', 'Rajasthan'): #iterating through 6 states, can be changed according to user perferance
-        count=0           #using a count variable to limit our search length for testing purposes
+        count=0 #using a count variable to limit our search length for testing purposes
         temp={}
         for x in data.values():
             if(count==5): break
@@ -127,13 +129,13 @@ def part3_main():
         data = load(open(join(dirname(__file__), 'step2.json'), "r", encoding='utf-8'))
 
     driver=linkedin_login()         #opening a new Chrome window with an a LinkedIn account logged in
-    count=0           #using a count variable to limit our search length for testing purposes
+    count=0 #using a count variable to limit our search length for testing purposes
     for x in data.values():
-        if(count==15): break
+        if(count==5): break
         for y in x.values():
-            if(count==15): break
+            if(count==5): break
             for z in y:
-                if(count==15): break
+                if(count==5): break
                 #writing the final data from step 3 of the task to a json file
                 append_json({z['company_name']:scrape_part3(z['company_url'], driver)}, 'step3.json')
                 count+=1
