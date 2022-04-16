@@ -1,4 +1,4 @@
-from selenium.webdriver import Chrome
+from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from json import dumps, load
 from os.path import join, dirname
@@ -6,7 +6,9 @@ from time import sleep
 
 
 def linkedin_login():
-    driver=Chrome()         #initialising Chrome object
+    chromeOptions = ChromeOptions()
+    chromeOptions.add_argument("--headless")        #running webdriver in headless mode 
+    driver=Chrome(chrome_options=chromeOptions)         #initialising Chrome object
     driver.get('https://www.linkedin.com/checkpoint/lg/login?trk=hb_signin')        #navigating to the LinkedIn login page 
 
     username = driver.find_element_by_xpath('//input[@id="username"]')
@@ -87,7 +89,9 @@ def scrape_part3(url, driver):
 
 
 def part1_main():
-    driver=Chrome()
+    chromeOptions = ChromeOptions()
+    chromeOptions.add_argument("--headless")        #running webdriver in headless mode 
+    driver=Chrome(chrome_options=chromeOptions)         #initialising Chrome object
     z={}
     driver.get('https://www.careerguide.com/career-options')  #navigating to careerguide's webpage
     for x in driver.find_elements_by_xpath("//div[@class='col-md-4'][@style='padding: 15px;']"):
