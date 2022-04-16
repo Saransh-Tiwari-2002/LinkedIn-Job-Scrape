@@ -1,4 +1,4 @@
-from selenium.webdriver import Chrome
+from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from json import dumps, load
 from os.path import join, dirname
@@ -6,7 +6,10 @@ from time import sleep
 
 
 def linkedin_login():
-    driver=Chrome()         #initialising Chrome object
+    options = ChromeOptions()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = Chrome(options=options)        #initialising Chrome object
+
     driver.get('https://www.linkedin.com/checkpoint/lg/login?trk=hb_signin')        #navigating to the LinkedIn login page 
 
     username = driver.find_element_by_xpath('//input[@id="username"]')
@@ -40,7 +43,7 @@ def get_num(temp):
 def scrape_part2(career_type, driver, location_state):
 
     #Fetching details about jobs of given career type in the given State
-    url=f'https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={career_type.lower().replace(" ", "%20")}&location={location_state}'
+    url=f'https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={career_type.lower().replace(" ", "%20")}&location=India'
     driver.get(url) 
 
     #changing location from India to a particular state
@@ -53,7 +56,6 @@ def scrape_part2(career_type, driver, location_state):
     sleep(3)
     temp_list=[]
     try: 
-    
         for x in driver.find_element_by_xpath('//ul[@class="jobs-search-results__list list-style-none"]').find_elements_by_xpath(".//li"):
             try:
                 job_title=x.find_element_by_xpath(".//a[@class='disabled ember-view job-card-container__link job-card-list__title']").text   
@@ -87,7 +89,10 @@ def scrape_part3(url, driver):
 
 
 def part1_main():
-    driver=Chrome()
+    options = ChromeOptions()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = Chrome(options=options)        #initialising Chrome object
+
     z={}
     driver.get('https://www.careerguide.com/career-options')  #navigating to careerguide's webpage
     for x in driver.find_elements_by_xpath("//div[@class='col-md-4'][@style='padding: 15px;']"):
